@@ -15,6 +15,13 @@ class Controler(object):
                 res.append(player)
         return res
 
+    def find_players_in_tournament(self, last_name):
+        res = []
+        for player in self.tournament_controler.current_tournament.players_tournament_list:
+            if player.last_name.startswith(last_name):
+                res.append(player)
+        return res
+
     def find_tournament(self, name_tournament):
         res = []
         for tournament in self.tournament_controler.tournament_list:
@@ -25,4 +32,3 @@ class Controler(object):
     def save_all(self):
         self.player_controler.save_players()
         self.tournament_controler.save_all_tournaments()
-

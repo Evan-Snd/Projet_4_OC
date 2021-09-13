@@ -17,6 +17,9 @@ class TournamentControler:
     def current_round(self):
         return self.current_tournament.current_round
 
+    def delete_player_to_current_tournament(self, player):
+        self.current_tournament.delete_player(player)
+
     def add_player_to_current_tournament(self, player):
         """Add player in current tournament"""
         self.current_tournament.add_player(player)
@@ -183,11 +186,12 @@ class TournamentControler:
             res.append(ser_match)
         return res
 
-    def serialize_match(self, match):
+    @staticmethod
+    def serialize_match(match):
         return {
             'J1': [match[0][0].ind, match[0][1]],
             'J2': [match[1][0].ind, match[1][1]]
-        }
+            }
 
     @staticmethod
     def serialized_one_player_for_match(player):

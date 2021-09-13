@@ -89,9 +89,10 @@ class Tournament:
         return players_points
 
     def add_player(self, player):
-        """Add player in current tournament"""
-        # Add player in tournament
         self.__players_tournament.append(player)
+
+    def delete_player(self, player):
+        self.__players_tournament.remove(player)
 
     def add_round(self, roundd):
         self.__round_list.append(roundd)

@@ -17,6 +17,9 @@ class PlayerControler:
             self.players.append(player)
         # save players
 
+    def delete_player(self, player):
+        self.players.remove(player)
+
     def load_players(self):
         # Load data from DB
         db = TinyDB('player.json')
