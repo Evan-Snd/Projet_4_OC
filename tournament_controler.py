@@ -64,7 +64,7 @@ class TournamentControler:
 
     @property
     def create_new_round_name(self):
-        roundd = 'Round' + str(len(self.round_list) + 1)
+        roundd = 'ROUND ' + str(len(self.round_list) + 1)
         return roundd
 
     @property
@@ -174,7 +174,7 @@ class TournamentControler:
     def serialize_round(self, round):
         return {
             'Nom': round.round_name,
-            'Date de debut': round.start_date,
+            'Date de début': round.start_date,
             'Date de fin': round.end_date,
             'Matches': self.serialize_matches(round.list_matches)
         }
@@ -182,7 +182,7 @@ class TournamentControler:
     def serialize_matches(self, matches):
         res = []
         for match in matches:
-            ser_match = self.serialize_match(match)
+            ser_match = TournamentControler.serialize_match(match)
             res.append(ser_match)
         return res
 

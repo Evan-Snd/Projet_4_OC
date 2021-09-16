@@ -1,11 +1,11 @@
 import sys
-import controleur
+import controler
 
 
 class Vue:
 
     def __init__(self):
-        self.control = controleur.Controler()
+        self.control = controler.Controler()
 
     @property
     def pcontrol(self):
@@ -19,11 +19,11 @@ class Vue:
 
     def menu(self):
         # Display menu
-        response = input('\n ******************** MENU PRINCIPALE ******************** \n\n'
-                         '1 - Gestion des joueurs \n'
-                         '2 - Gestion des tournois\n'
-                         '3 - Sauvegarde\n'
-                         '4 - Quitter le logiciel\n')
+        print('\n ******************** MENU PRINCIPALE ******************** \n\n'
+              '1 - Gestion des joueurs \n'
+              '2 - Gestion des tournois\n'
+              '3 - Quitter le logiciel\n')
+        response = input('Choix : ')
 
         if response == '1':
             self.menu_players()
@@ -32,49 +32,50 @@ class Vue:
             self.menu_tournament()
 
         elif response == '3':
-            self.pcontrol.save_players()
-
-        elif response == '4':
             x = 1 / 0
             print(x)
 
     # ******************************* MENU PLAYERS   *******************************
 
     def menu_players(self):
-        response2 = input('\n ******************** GESTION DES JOUEURS ******************** \n\n'
-                          '1 - Enregistrer un joueur \n'
-                          '2 - Afficher la liste des joueurs \n'
-                          '3 - Supprimer un joueur\n'
-                          '4 - Revenir au menu principale\n')
-        if response2 == '1':
+        print('\n ******************** GESTION DES JOUEURS ******************** \n\n'
+              '1 - Enregistrer un joueur \n'
+              '2 - Afficher la liste des joueurs \n'
+              '3 - Supprimer un joueur\n'
+              '4 - Revenir au menu principale\n')
+
+        response = input('Choix : ')
+        if response == '1':
             self.insert_and_register_player_information()
 
-        elif response2 == '2':
+        elif response == '2':
             players = self.pcontrol.players  # /!\
             self.view_player_list(players)
             self.menu_players()
 
-        elif response2 == '3':
+        elif response == '3':
             self.delete_player_from_data_base()
             self.menu_players()
 
-        elif response2 == '4':
+        elif response == '4':
             self.menu()
 
     # ******************************* MENU TOURNAMENT   *******************************
 
     def menu_tournament(self):
-        response = input('\n ******************** GESTION DES TOURNOIS ******************** \n\n'
-                         '1 - Creer un tournoi \n'
-                         '2 - Afficher la liste des tournois \n'
-                         '3 - Revenir au menu principale \n')
+        print('\n ******************** GESTION DES TOURNOIS ******************** \n\n'
+              '1 - Créer un tournoi \n'
+              '2 - Afficher la liste des tournois \n'
+              '3 - Revenir au menu principale \n')
+        response = input('Choix : ')
         if response == '1':
             self.create_tournament()
             self.menu_tournament_2()
 
         if response == '2':
             # Afficher la liste des tournois
-            print('\n ******************** LISTE DES TOURNOIS ******************** \n(Entrer 00 pour revenir en arriere\n')
+            print(
+                '\n ******************* LISTE DES TOURNOIS ******************* ----- (Entrer 00 pour annulé)\n')
             list_tournament = self.tcontrol.tournament_list
             self.view_tournament_list(list_tournament)
             self.find_a_tournament()
@@ -89,10 +90,11 @@ class Vue:
 
     def menu_tournament_2(self):
         if self.tcontrol.status == 'Init':
-            response = input('\n ******************** INITIALISATION DU TOURNOI ********************\n\n'
-                             '1 - Ajouter des joueurs au tournoi courant \n'
-                             '2 - Supprimer des joueurs du tournoi courant \n'
-                             '3 - Creer un premier Round (possible que si 8 joueurs sont inscrits)\n')
+            print('\n ******************** INITIALISATION DU TOURNOI ********************\n\n'
+                  '1 - Ajouter des joueurs au tournoi courant \n'
+                  '2 - Supprimer des joueurs du tournoi courant \n'
+                  '3 - Créer un premier Round (possible que si 8 joueurs sont inscrits)\n')
+            response = input('Choix : ')
 
             if response == '1':
                 self.add_player_to_the_tournament()
@@ -110,7 +112,7 @@ class Vue:
                     self.menu_tournament_3(k)
 
                 else:
-                    print("Il n'y a pas assez de joueur pour creer un Round")
+                    print("Il n'y a pas assez de joueur pour créer un Round")
                     self.menu_tournament_2()
             else:
                 self.menu_tournament_2()
@@ -120,18 +122,20 @@ class Vue:
     def menu_tournament_3(self, k):
         if self.tcontrol.status == 'Round 1':
             if k >= 2:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n'
-                                 '5 - Creer un deuxieme round \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n'
+                      '5 - Créer un deuxième round \n')
+                response = input('Choix : ')
             else:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n')
+                response = input('Choix : ')
 
             if response == '1':
                 match = self.tcontrol.get_match(0)
@@ -159,7 +163,7 @@ class Vue:
                     self.menu_tournament_4(k)
                 else:
                     print(
-                        "Impossible de creer un nouveau round tant que les resultats de tous les match n'ont pas été saisies")
+                        "Impossible de créer un nouveau round tant que les résultats de tous les matchs n'ont pas été saisies")
 
             else:
                 self.menu_tournament_3(k)
@@ -171,18 +175,20 @@ class Vue:
     def menu_tournament_4(self, k):
         if self.tcontrol.status == 'Round 2':
             if k >= 2:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n'
-                                 '5 - Creer un troisieme round \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n'
+                      '5 - Créer un deuxième round \n')
+                response = input('Choix : ')
             else:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n')
+                response = input('Choix : ')
 
             if response == '1':
                 match = self.tcontrol.get_match(0)
@@ -210,7 +216,7 @@ class Vue:
                     self.menu_tournament_5(k)
                 else:
                     print(
-                        "Impossible de creer un nouveau round tant que les resultats de tous les match n'ont pas été saisies")
+                        "Impossible de créer un nouveau round tant que les résultats de tous les matchs n'ont pas été saisies")
             else:
                 self.menu_tournament_4(k)
 
@@ -221,18 +227,20 @@ class Vue:
     def menu_tournament_5(self, k):
         if self.tcontrol.status == 'Round 3':
             if k >= 2:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n'
-                                 '5 - Creer un quatrieme round \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n'
+                      '5 - Créer un deuxième round \n')
+                response = input('Choix : ')
             else:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n')
+                response = input('Choix : ')
 
             if response == '1':
                 match = self.tcontrol.get_match(0)
@@ -260,7 +268,7 @@ class Vue:
                     self.menu_tournament_6(k)
                 else:
                     print(
-                        "Impossible de creer un nouveau round tant que les resultats de tous les match n'ont pas été saisies")
+                        "Impossible de créer un nouveau round tant que les résultats de tous les matchs n'ont pas été saisies")
             else:
                 self.menu_tournament_5(k)
 
@@ -271,18 +279,20 @@ class Vue:
     def menu_tournament_6(self, k):
         if self.tcontrol.status == 'Round 4':
             if k >= 2:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n'
-                                 '5 - Afficher le classement final \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n'
+                      '5 - Créer un deuxième round \n')
+                response = input('Choix : ')
             else:
-                response = input('\n\n ******************** SAISIE DES RESULSTATS ********************\n\n'
-                                 '1 - Saisir les resultats du Match 1 \n'
-                                 '2 - Saisir les resultats du Match 2 \n'
-                                 '3 - Saisir les resultats du Match 3 (Pas programmer) \n'
-                                 '4 - Saisir les resultats du Match 4 (Pas programmer) \n')
+                print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n'
+                      '1 - Saisir les résultats du Match 1 \n'
+                      '2 - Saisir les résultats du Match 2 \n'
+                      '3 - Saisir les résultats du Match 3 (Pas programmer) \n'
+                      '4 - Saisir les résultats du Match 4 (Pas programmer) \n')
+                response = input('Choix : ')
 
             if response == '1':
                 match = self.tcontrol.get_match(0)
@@ -307,7 +317,7 @@ class Vue:
                     self.menu_classement_final()
                 else:
                     print(
-                        "Impossible de creer un nouveau round tant que les resultats de tous les match n'ont pas ete saisies")
+                        "Impossible de créer un nouveau round tant que les résultats de tous les matchs n'ont pas été saisies")
             else:
                 self.menu_tournament_6(k)
 
@@ -321,8 +331,9 @@ class Vue:
         classement_after_round = self.tcontrol.sorting_player_classement_after_round
         self.view_classement_players(classement_after_round)
         self.control.save_all()
-        response = input('\n1 - Revenir au menu principale \n'
-                         "2 - Changer le classement d'un joueur\n")
+        print('\n1 - Revenir au menu principale \n'
+              "2 - Changer le classement d'un joueur\n")
+        response = input('Choix : ')
         if response == '1':
             self.menu()
         elif response == '2':
@@ -338,9 +349,10 @@ class Vue:
     def insert_result_of_the_match(self, match):
         print('\n ******************** RESULTAT DU MATCH ********************\n\n')
         self.view_match_versus(match)
-        result = input('\n1 - Le joueur 1 a gagne \n'
-                       '2 - Le joueur 2 a gagne \n'
-                       '3 - Egalite \n')
+        print('\n1 - Le joueur 1 a gagné \n'
+              '2 - Le joueur 2 a gagné \n'
+              '3 - Egalité \n')
+        result = input('Choix : ')
 
         if result == '1':
             result_match = self.tcontrol.player1_win(match)
@@ -359,7 +371,7 @@ class Vue:
     def insert_and_register_player_information(self):
         ind = len(self.pcontrol.players) + 1
         last_name = input('\nEntrer un Nom (Majuscule au debut) : ')
-        first_name = input('Entrer un Prenom (Majuscule au debut) : ')
+        first_name = input('Entrer un Prénom (Majuscule au debut) : ')
         date_birth = input('Entrer une date de naissance (jj/mm/aaaa) : ')
         gender = input('Entre un genre (M/F) : ')
         classement = input('Entrer un classement :')
@@ -370,7 +382,7 @@ class Vue:
     def view_player_list(self, players):
         msg_list = []
         for player in players:
-            msg_player = "Ind: {} ; Nom: {} ; Prenom: {} ; Date de naissance: {} ; Sexe: {} ; Classement: {}".format(
+            msg_player = "Ind: {} ; Nom: {} ; Prénom: {} ; Date de naissance: {} ; Sexe: {} ; Classement: {}".format(
                 player.ind, player.last_name, player.first_name, player.date_birth, player.gender, player.classement)
             msg_list.append(msg_player)
         print("\n".join(msg_list))
@@ -409,7 +421,7 @@ class Vue:
         msg_versus_list = []
         for i, player_result in enumerate(players_points):
             player = player_result[0]
-            msg_player = "{} {} ; Rank : {}".format(player.last_name, player.first_name,
+            msg_player = "{} {} ; Classement : {}".format(player.last_name, player.first_name,
                                                     player.classement) + ' ; Points : ' + str(
                 players_points[i][1])
             msg_versus_list.append(msg_player)
@@ -418,9 +430,9 @@ class Vue:
     def view_round_list(self, round_list):
         msg_round_list = []
         for roundd in round_list:
-            msg_round = "Nom : {} ; \nDate de debut : {} ; \nListe des matchs : {}".format(roundd.round_name,
-                                                                                           roundd.start_date,
-                                                                                           roundd.list_matches)
+            msg_round = "\nNom : {} \nDate de début : {} ; \nListe des matchs : {}".format(roundd.round_name,
+                                                                                         roundd.start_date,
+                                                                                         roundd.list_matches)
             msg_round_list.append(msg_round)
         print("\n".join(msg_round_list))
 
@@ -432,7 +444,7 @@ class Vue:
                 msg_match_list.append('\nMatch ' + str(i + 1) + ':\n')
                 for player_result in match:
                     player = self.tcontrol.load_player(player_result[0])
-                    msg_match = " {} ".format(player.first_name + ' ' + player.last_name) + ' ; Points : ' + str(
+                    msg_match = " {} ".format(player.first_name + ' ' + player.last_name) + '  Points : ' + str(
                         match[i][1])
                     msg_match_list.append(msg_match)
         print("\n".join(msg_match_list))
@@ -448,7 +460,7 @@ class Vue:
         location_tournament = input('Lieu du tournoi : ')
         if location_tournament == '00':
             self.create_tournament_object()
-        date_tournament = input('Date de debut du tournoi :') + ' - ' + input('Date de fin du tournoi :')
+        date_tournament = input('Date de début du tournoi :') + ' - ' + input('Date de fin du tournoi :')
         self.back_return(date_tournament)
         description_tournament = input('Description du tournoi :')
         self.back_return(description_tournament)
@@ -463,7 +475,7 @@ class Vue:
             self.create_tournament_object()
 
     def create_tournament(self):
-        response = input('\nCreer un nouveau tournoi ? [oui/non] ')
+        response = input('\nCréer un nouveau tournoi ? [oui/non] ')
         if response == 'oui':
             tournament = self.create_tournament_object()
             return tournament
@@ -530,7 +542,7 @@ class Vue:
             # générer des 4 paires en fonction du classement pour le premier tour
             self.generate_four_match_by_ranking(list_sorting_by_rankink)
         else:
-            print("Impossible de creer le premier round tant que les joueurs n'ont pas été ajoutés")
+            print("Impossible de créer le premier round tant que les joueurs n'ont pas été ajoutés")
 
     def method_create_new_round(self):
         roundd = self.tcontrol.create_new_round
@@ -568,7 +580,7 @@ class Vue:
 
     def delete_player_from_tournament(self):
         print("\n************************* SUPPRESSION D'UN JOUEUR DU TOURNOI : *************************\n")
-        last_name = input('\nEntrer un Nom (Majuscule au debut) : ')
+        last_name = input('\nEntrer un Nom (Majuscule au début) : ')
         player_find = self.control.find_players_in_tournament(last_name)
         print("\n************************* JOUEUR TROUVE : *************************\n")
         self.view_player_list(player_find)
@@ -607,7 +619,7 @@ class Vue:
     # ******************************* FIND A TOURNAMENT  *******************************
 
     def find_a_tournament(self):
-        name_tournament = input('\nEntrer le Nom du tournoi recherche (Majuscule au debut) :')
+        name_tournament = input('\nEntrer le Nom du tournoi recherché (Majuscule au debut) :')
         if name_tournament == '00':
             self.menu_tournament()
         tournament_find = self.control.find_tournament(name_tournament)
@@ -624,7 +636,7 @@ class Vue:
                 list_players = self.tcontrol.players_list
                 self.menu_view_tournoi_informations(round_list, list_match, list_players)
             elif tournament.index != int(index):
-                print("L'indice rentre ne correspond a aucun Tournoi")
+                print("L'indice rentré ne correspond a aucun Tournoi")
                 self.find_a_tournament()
             elif index == '00':
                 # retour à la séléction de nom et prenom
@@ -634,11 +646,12 @@ class Vue:
     # ******************************* MENU VIEW TOURNAMENT INFORMATIONS  *******************************
 
     def menu_view_tournoi_informations(self, round_list, list_match, list_players):
-        response = input("\n\n ******************** LISTE D'AFFICHAGE DU TOURNOI ********************\n\n"
-                         '1 - Afficher tous les joueurs du tournoi \n'
-                         '2 - Afficher tous les round du tournoi \n'
-                         '3 - Afficher tous les match du tournoi \n'
-                         '4 - Revenir a la gestion des tournois\n')
+        print("\n\n ******************** LISTE D'AFFICHAGE DU TOURNOI ********************\n\n"
+              '1 - Afficher tous les joueurs du tournoi \n'
+              '2 - Afficher tous les round du tournoi \n'
+              '3 - Afficher tous les match du tournoi \n'
+              '4 - Revenir a la gestion des tournois\n')
+        response = input('Choix : ')
 
         if response == '1':
             self.menu_view_players_by_ranking_and_alphabetical_order(round_list, list_match, list_players)
@@ -654,13 +667,14 @@ class Vue:
     # ******************************* MENU VIEW PLAYERS IN THE TOURNAMENT  *******************************
 
     def menu_view_players_by_ranking_and_alphabetical_order(self, round_list, list_match, list_players):
-        response = input("\n\n ******************** LISTE D'AFFICHAGE DES JOUEURS ********************\n\n"
-                         '1 - Afficher par ordre alphabetique \n'
-                         '2 - Afficher par ordre de classement \n'
-                         "3 - Revenir au menu d'affichage \n")
+        print("\n\n ******************** LISTE D'AFFICHAGE DES JOUEURS ********************\n\n"
+              '1 - Afficher par ordre alphabétique \n'
+              '2 - Afficher par ordre de classement \n'
+              "3 - Revenir au menu d'affichage \n")
+        response = input('Choix : ')
 
         if response == '1':
-            print('\nListe des joueurs par ordre alphabetique : \n')
+            print('\nListe des joueurs par ordre alphabétique : \n')
             all_players = sorted(list_players, key=lambda player: player.last_name)
             self.view_player_list(all_players)
         elif response == '2':

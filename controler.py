@@ -1,11 +1,11 @@
 import tournament_controler
-import controleur_player
+import controler_player
 
 
 class Controler(object):
 
     def __init__(self):
-        self.player_controler = controleur_player.PlayerControler()
+        self.player_controler = controler_player.PlayerControler()
         self.tournament_controler = tournament_controler.TournamentControler(self)
 
     def find_players(self, last_name):
