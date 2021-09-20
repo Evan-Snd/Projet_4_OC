@@ -41,8 +41,9 @@ class Vue:
         print('\n ******************** GESTION DES JOUEURS ******************** \n\n'
               '1 - Enregistrer un joueur \n'
               '2 - Afficher la liste des joueurs \n'
-              '3 - Supprimer un joueur\n'
-              '4 - Revenir au menu principale\n')
+              "3 - Changer le classement d'un joueur\n"
+              '4 - Supprimer un joueur\n'
+              '5 - Revenir au menu principale\n')
 
         response = input('Choix : ')
         if response == '1':
@@ -54,10 +55,14 @@ class Vue:
             self.menu_players()
 
         elif response == '3':
-            self.delete_player_from_data_base()
+            self.change_player_ranking(self.pcontrol.players)
             self.menu_players()
 
         elif response == '4':
+            self.delete_player_from_data_base()
+            self.menu_players()
+
+        elif response == '5':
             self.menu()
 
     # ******************************* MENU TOURNAMENT   *******************************
@@ -422,7 +427,7 @@ class Vue:
         for i, player_result in enumerate(players_points):
             player = player_result[0]
             msg_player = "{} {} ; Classement : {}".format(player.last_name, player.first_name,
-                                                    player.classement) + ' ; Points : ' + str(
+                                                          player.classement) + ' ; Points : ' + str(
                 players_points[i][1])
             msg_versus_list.append(msg_player)
         print("\n".join(msg_versus_list))
@@ -431,8 +436,8 @@ class Vue:
         msg_round_list = []
         for roundd in round_list:
             msg_round = "\nNom : {} \nDate de début : {} ; \nListe des matchs : {}".format(roundd.round_name,
-                                                                                         roundd.start_date,
-                                                                                         roundd.list_matches)
+                                                                                           roundd.start_date,
+                                                                                           roundd.list_matches)
             msg_round_list.append(msg_round)
         print("\n".join(msg_round_list))
 
@@ -642,6 +647,34 @@ class Vue:
                 # retour à la séléction de nom et prenom
                 self.find_a_tournament()
         self.find_a_tournament()
+
+    # ******************************* CHANGE PLAYER RANKING  *******************************
+
+    def change_player_ranking(self, players_list):
+        last_name = input('\nEntrer un Nom (Majuscule au debut) : ')
+        player_find = self.control.find_players(last_name)
+        print("\n************************* JOUEUR TROUVE : *************************\n")
+        self.view_player_list(player_find)
+        index = input("\nENTRER l'ID DU JOUEUR (00=cancel): ")
+        for player in player_find:
+            if player.ind == int(index):
+                print('\nJOUEUR SELECTIONNE :')
+                print("\nInd: {} ; Nom: {} ; Prénom: {} ; Date de naissance: {} ; Classement: {}".format(
+                    player.ind, player.last_name, player.first_name, player.date_birth,
+                    player.classement))
+                new_rank = input('\n Attribué le nouveau classement : ')
+                player.classement = int(new_rank)
+                for players in players_list:
+                    if players == player:
+                        continue
+                    elif players.classement >= player.classement:
+                        players.classement += 1
+                    else:
+                        continue
+                break
+            else:
+                continue
+        self.pcontrol.save_players()
 
     # ******************************* MENU VIEW TOURNAMENT INFORMATIONS  *******************************
 
