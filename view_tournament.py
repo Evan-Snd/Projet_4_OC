@@ -51,7 +51,7 @@ class Vue:
 
         elif response == '2':
             players = self.pcontrol.players  # /!\
-            self.view_player_list(players)
+            self.menu_view_players_by_ranking_and_alphabetical_order(players)
             self.menu_players()
 
         elif response == '3':
@@ -687,7 +687,7 @@ class Vue:
         response = input('Choix : ')
 
         if response == '1':
-            self.menu_view_players_by_ranking_and_alphabetical_order(round_list, list_match, list_players)
+            self.menu_view_players_by_ranking_and_alphabetical_order_in_tournament(round_list, list_match, list_players)
         elif response == '2':
             self.view_round_list(round_list)
             self.menu_view_tournoi_informations(round_list, list_match, list_players)
@@ -699,7 +699,7 @@ class Vue:
 
     # ******************************* MENU VIEW PLAYERS IN THE TOURNAMENT  *******************************
 
-    def menu_view_players_by_ranking_and_alphabetical_order(self, round_list, list_match, list_players):
+    def menu_view_players_by_ranking_and_alphabetical_order_in_tournament(self, round_list, list_match, list_players):
         print("\n\n ******************** LISTE D'AFFICHAGE DES JOUEURS ********************\n\n"
               '1 - Afficher par ordre alphabétique \n'
               '2 - Afficher par ordre de classement \n'
@@ -716,7 +716,28 @@ class Vue:
             self.view_player_list(all_players)
         elif response == '3':
             self.menu_view_tournoi_informations(round_list, list_match, list_players)
-        self.menu_view_players_by_ranking_and_alphabetical_order(round_list, list_match, list_players)
+        self.menu_view_players_by_ranking_and_alphabetical_order_in_tournament(round_list, list_match, list_players)
+
+    # ******************************* MENU VIEW PLAYERS IN THE DATA BASE  *******************************
+
+    def menu_view_players_by_ranking_and_alphabetical_order(self, list_players):
+        print("\n\n ******************** LISTE D'AFFICHAGE DES JOUEURS ********************\n\n"
+              '1 - Afficher par ordre alphabétique \n'
+              '2 - Afficher par ordre de classement \n'
+              "3 - Revenir au menu Gestion des joueurs\n")
+        response = input('Choix : ')
+
+        if response == '1':
+            print('\nListe des joueurs par ordre alphabétique : \n')
+            all_players = sorted(list_players, key=lambda player: player.last_name)
+            self.view_player_list(all_players)
+        elif response == '2':
+            print('\nListe des joueurs par ordre de classement : \n')
+            all_players = sorted(list_players, key=lambda player: player.classement)
+            self.view_player_list(all_players)
+        elif response == '3':
+            self.menu_players()
+        self.menu_view_players_by_ranking_and_alphabetical_order(list_players)
 
     # ******************************* MAIN *******************************
 
