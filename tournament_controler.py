@@ -54,6 +54,10 @@ class TournamentControler:
         self.current_tournament = tournament
         return tournament
 
+    def end_date(self):
+        mydatetime = datetime.datetime.now()
+        round_obj.Round.end_date = mydatetime.strftime('%Y-%m-%d %H:%M:%S')
+
     @property
     def create_new_round(self):
         mydatetime = datetime.datetime.now()
@@ -118,7 +122,7 @@ class TournamentControler:
             tournament.add_round(round)
 
     def load_round(self, serialized_round):
-        res = round_obj.Round(serialized_round['Nom'], serialized_round['Date de debut'])
+        res = round_obj.Round(serialized_round['Nom'], serialized_round['Date de début'])
         res.end_date = serialized_round['Date de fin']
         self.load_matches(res, serialized_round['Matches'])
         return res
@@ -188,12 +192,22 @@ class TournamentControler:
 
     @staticmethod
     def serialize_match(match):
-        return {
-            'J1': [match[0][0].ind, match[0][1]],
-            'J2': [match[1][0].ind, match[1][1]]
-            }
+        if isinstance(match[0][0], int):
+            return {
+                'J1': [match[0][0], match[0][1]],
+                'J2': [match[1][0], match[1][1]]
+                }
+        else:
+            return {
+                'J1': [match[0][0].ind, match[0][1]],
+                'J2': [match[1][0].ind, match[1][1]]
+                }
 
     @staticmethod
     def serialized_one_player_for_match(player):
         ser_player = {player.last_name}
         return ser_player
+
+    def current_tournament_none(self):
+        self.current_tournament = None
+        return self.current_tournament

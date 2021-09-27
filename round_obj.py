@@ -45,9 +45,25 @@ class Round:
         return match
 
     def nobody_win(self, match):
-        match[0][1] = 1/2
-        match[1][1] = 1/2
+        match[0][1] = 1 / 2
+        match[1][1] = 1 / 2
         return match
 
     def add_match(self, match):
         self.__list_match.append(match)
+
+    def has_match_result(self, ind_match):
+        match = self.get_match(ind_match-1)
+        if match[0][1] is not None:
+            return True
+        else:
+            return False
+
+    def get_nb_match_results(self):
+        res = 0
+        for match in self.list_matches:
+            if match[0][1] is not None:
+                res += 1
+            else:
+                continue
+        return res

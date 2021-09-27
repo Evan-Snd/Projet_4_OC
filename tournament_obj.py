@@ -96,3 +96,6 @@ class Tournament:
 
     def add_round(self, roundd):
         self.__round_list.append(roundd)
+
+    def get_round(self, round_index):
+        return self.__round_list[round_index]
