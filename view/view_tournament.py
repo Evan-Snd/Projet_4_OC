@@ -1,11 +1,11 @@
-import sys
-import controler
+from .controler import Controler
+from random import randint
 
 
 class Vue:
 
     def __init__(self):
-        self.control = controler.Controler()
+        self.control = Controler()
 
     @property
     def pcontrol(self):
@@ -32,8 +32,7 @@ class Vue:
             self.menu_tournament()
 
         elif response == '3':
-            x = 1 / 0
-            print(x)
+            raise KeyboardInterrupt()
 
     # ******************************* MENU PLAYERS   *******************************
 
@@ -123,7 +122,7 @@ class Vue:
                 self.menu_tournament_initialization()
 
             if response == '3':
-                if len(self.tcontrol.current_tournament.players_tournament_list) == 4:
+                if len(self.tcontrol.current_tournament.players_tournament_list) == 8:
                     print('\n ******************** CREATION DU PREMIER ROUND ********************\n')
                     self.method_create_first_round()
                     self.menu_tournament_round(1)
@@ -144,12 +143,11 @@ class Vue:
             print('\n\n ******************** SAISIE DES RESULTATS ********************\n\n')
             self.menu_tournament_match_entry(num_round, 1)
             self.menu_tournament_match_entry(num_round, 2)
-            """self.menu_tournament_match_entry(num_round, 3)
+            self.menu_tournament_match_entry(num_round, 3)
             self.menu_tournament_match_entry(num_round, 4)
-            """
 
             nb_results = round.get_nb_match_results()
-            if nb_results == 2:
+            if nb_results == 4:
                 if num_round == 4:
                     print('5 - Afficher le classement final \n')
                     is_classement = True
@@ -208,7 +206,7 @@ class Vue:
         classement_after_round = self.tcontrol.sorting_player_classement_after_round
         self.view_classement_players(classement_after_round)
         self.control.save_all()
-        print('\n1 - Revenir au menu principal \n'
+        print('\n1 - Revenir au menu principale \n'
               "2 - Changer le classement d'un joueur\n")
         response = input('Choix : ')
         if response == '1':
@@ -251,8 +249,9 @@ class Vue:
         first_name = input('Entrer un Prénom (Majuscule au debut) : ')
         date_birth = input('Entrer une date de naissance (jj/mm/aaaa) : ')
         gender = input('Entre un genre (M/F) : ')
-        classement = input('Entrer un classement :')
+        classement = int(input('Entrer un classement :'))
         self.pcontrol.register_player(ind, last_name, first_name, date_birth, gender, classement)
+        self.menu_players()
 
     # ******************************* METHODE VIEW  *******************************
 
@@ -264,12 +263,27 @@ class Vue:
             msg_list.append(msg_player)
         print("\n".join(msg_list))
 
+    def black_or_white(self, couleur):
+        if couleur is None:
+            if randint(0, 1) == 1:
+                couleur = 'Blanc'
+            else:
+                couleur = 'Noir'
+        elif couleur == 'Blanc':
+            couleur = 'Noir'
+        elif couleur == 'Noir':
+            couleur = 'Blanc'
+
+        return couleur
+
     def view_match_versus(self, match):
         msg_versus_list = []
         i = 1
+        couleur = None
         for player_result in match:
+            couleur = self.black_or_white(couleur)
             player = player_result[0]
-            msg_player = "Joueur {} : {} {}".format(i, player.last_name, player.first_name)
+            msg_player = "Joueur {} : {} {},     Couleur : {}".format(i, player.last_name, player.first_name, couleur)
             i = i + 1
             msg_versus_list.append(msg_player)
         print("\n".join(msg_versus_list))
@@ -287,10 +301,12 @@ class Vue:
     def view_tournament_list(self, tournament_list):
         msg_list = []
         for tournament in tournament_list:
-            msg_player = "\nIndex : {} \nNom du Tournoi : {} \nLieu du tournoi : {} \nDate du tournoi : {} \nDescription du tournoi : {}".format(
-                tournament.index, tournament.name_tournament, tournament.location_tournament,
-                tournament.date_tournament,
-                tournament.description_tournament)
+            msg_player = "\nIndex : {} \nNom du Tournoi : {} \nLieu du tournoi : {} \nDate du tournoi :" \
+                         " {} \nDescription du tournoi : {}".format(tournament.index,
+                                                                    tournament.name_tournament,
+                                                                    tournament.location_tournament,
+                                                                    tournament.date_tournament,
+                                                                    tournament.description_tournament)
             msg_list.append(msg_player)
         print("\n".join(msg_list))
 
@@ -307,10 +323,20 @@ class Vue:
     def view_round_list(self, round_list):
         msg_round_list = []
         for roundd in round_list:
+            list_matches = roundd.list_matches
             msg_round = "\nNom : {} \nDate de début : {} \nDate de fin : {}  \nListe des matchs : {}".format(
-                roundd.round_name, roundd.start_date, roundd.end_date, roundd.list_matches)
+                roundd.round_name, roundd.start_date, roundd.end_date, self.view_list_matches(list_matches))
             msg_round_list.append(msg_round)
         print("\n".join(msg_round_list))
+
+    def view_list_matches(self, list_matches):
+        msg_list_matches = []
+        for match in list_matches:
+            msg_match = "[J1: {}, {}; J2: {}, {}]".format(match[0][0].last_name, match[0][1],
+                                                          match[1][0].last_name, match[1][1])
+            msg_list_matches.append(msg_match)
+        #        return msg_list_matches
+        return ", ".join(msg_list_matches)
 
     def view_match_list(self, match_list):
         msg_match_list = []
@@ -320,8 +346,8 @@ class Vue:
                 msg_match_list.append('\nMatch ' + str(i + 1) + ':\n')
                 for player_result in match:
                     player = self.tcontrol.load_player(player_result[0])
-                    msg_match = " {} ".format(player.first_name + ' ' + player.last_name) + '  Points : ' + str(
-                        match[i][1])
+                    msg_match = " {} ".format(player.first_name + ' ' + player.last_name) + '  Points : ' + \
+                                str(player_result[1])
                     msg_match_list.append(msg_match)
         print("\n".join(msg_match_list))
 
@@ -332,29 +358,34 @@ class Vue:
               "Rentrez '00' si vous voulez revenir en arriere en cas d'erreur\n")
         index = len(self.tcontrol.tournament_list) + 1
         name_tournament = input('\nNom du tournoi (entre guillemets) : ')
-        self.back_return(name_tournament)
         location_tournament = input('Lieu du tournoi : ')
-        if location_tournament == '00':
-            self.create_tournament_object()
-        date_tournament = input('Date de début du tournoi :') + ' - ' + input('Date de fin du tournoi :')
-        self.back_return(date_tournament)
+        date_tournament = self.date_tournament()
         description_tournament = input('Description du tournoi :')
-        self.back_return(description_tournament)
-        tournament = self.tcontrol.create_tournament(index, name_tournament, location_tournament, date_tournament,
-                                                     description_tournament)
-        if (index or name_tournament or location_tournament or date_tournament or description_tournament) == '0':
-            self.create_tournament()
-        return tournament
-
-    def back_return(self, information):
-        if information == '00':
+        if name_tournament == '00' or location_tournament == '00' or date_tournament == '00' \
+                or description_tournament == '00':
             self.create_tournament_object()
+        else:
+            self.tcontrol.create_tournament(index, name_tournament, location_tournament, date_tournament,
+                                            description_tournament)
+
+    def date_tournament(self):
+        start_date_tournament = input('Date de début du tournoi (JJ-MM-AAAA) :')
+        self.control_validate(start_date_tournament)
+        end_date_tournament = input('Date de fin du tournoi (JJ-MM-AAAA) :')
+        self.control_validate(end_date_tournament)
+        date_tournament = start_date_tournament + ' - ' + end_date_tournament
+        return date_tournament
+
+    def control_validate(self, date):
+        if self.tcontrol.validate_date(date):
+            pass
+        else:
+            self.date_tournament()
 
     def create_tournament(self):
         response = input('\nCréer un nouveau tournoi ? [oui/non] ')
         if response == 'oui':
-            tournament = self.create_tournament_object()
-            return tournament
+            self.create_tournament_object()
         else:
             self.menu_tournament()
 
@@ -366,9 +397,9 @@ class Vue:
 
     def generate_four_match_by_ranking(self, players_by_ranking):
         print('\nListe des match pour le premier tour :')
-        for i in range(0, 2):  # (0,4)
+        for i in range(0, 4):  # (0,4)
             player1 = players_by_ranking[i]
-            player2 = players_by_ranking[i + 2]  # [i+4]
+            player2 = players_by_ranking[i + 4]  # [i+4]
             match = self.generate_one_match_by_ranking(player1, player2)
             print('\nMatch ' + str(i + 1) + ':')
             self.view_match_versus(match)  # Afficher Joueur 1 vs Joueur 2
@@ -377,7 +408,7 @@ class Vue:
     def generate_four_match_by_points(self, player_by_points):
         res = []
         available_players = [pp[0] for pp in player_by_points]
-        for i in range(2):
+        for i in range(4):
             player1 = available_players[0]
             player2 = self.__find_other_player_for_match(player1, available_players[1:])
             if player2 is None:
@@ -411,7 +442,7 @@ class Vue:
     # ******************************* CREATE ROUND  *******************************
 
     def method_create_first_round(self):
-        if len(self.tcontrol.current_tournament.players_tournament_list) == 4:  # (8 à la place de 4 normalement)
+        if len(self.tcontrol.current_tournament.players_tournament_list) == 8:  # (8 à la place de 4 normalement)
             roundd = self.tcontrol.create_new_round
             self.tcontrol.add_round_to_current_tournament(roundd)
             list_sorting_by_rankink = self.tcontrol.sorting_player_ranking
@@ -430,7 +461,7 @@ class Vue:
     # ******************************* ADD PLAYER TO TOURNAMENT  *******************************
 
     def add_player_to_the_tournament(self):
-        while len(self.tcontrol.current_tournament.players_tournament_list) <= 3:  # NORMALEMENT 7 A LA PLACE DE 3
+        while len(self.tcontrol.current_tournament.players_tournament_list) <= 7:
             print("\n************************* AJOUT D'UN JOUEUR : *************************\n")
             print('\nNOMBRE DE JOUEURS INSCRITS AU TOURNOI : ' + str(
                 len(self.tcontrol.current_tournament.players_tournament_list)))
@@ -476,7 +507,7 @@ class Vue:
         # ******************************* DELETE A PLAYER FROM THE DATA BASE *******************************
 
     def delete_player_from_data_base(self):
-        print("\n************************* SUPPRESSION D'UN JOUEUR DE LA BASE DE DONNEES : *************************\n")
+        print("\n************************ SUPPRESSION D'UN JOUEUR DE LA BASE DE DONNEES : *************************\n")
         last_name = input('\nEntrer un Nom (Majuscule au debut) : ')
         player_find = self.control.find_players(last_name)
         print("\n************************* JOUEUR TROUVE : *************************\n")
@@ -508,12 +539,11 @@ class Vue:
                 round_list = self.tcontrol.round_list
                 list_match = []
                 for roundd in round_list:
-                    list_match.append(self.tcontrol.list_match)
+                    list_match.append(roundd.list_matches)
                 list_players = self.tcontrol.players_list
                 self.menu_view_tournoi_informations(round_list, list_match, list_players)
             elif tournament.index != int(index):
-                print("L'indice rentré ne correspond a aucun Tournoi")
-                self.find_a_tournament()
+                continue
             elif index == '00':
                 self.find_a_tournament()
             else:
@@ -575,7 +605,8 @@ class Vue:
         response = input('Choix : ')
 
         if response == '1':
-            self.menu_view_players_by_ranking_and_alphabetical_order_in_tournament(round_list, list_match, list_players)
+            self.menu_view_players_by_ranking_and_alphabetical_order_in_tournament(
+                round_list, list_match, list_players)
         elif response == '2':
             self.view_round_list(round_list)
             self.menu_view_tournoi_informations(round_list, list_match, list_players)
@@ -628,21 +659,4 @@ class Vue:
             self.menu_players()
         self.menu_view_players_by_ranking_and_alphabetical_order(list_players)
 
-    # ******************************* MAIN *******************************
-
-
-if __name__ == "__main__":
-    vue = Vue()
-    try:
-        while True:
-            vue.menu()
-    except ZeroDivisionError as exc:
-        # print error
-        pass
-    finally:
-        # save
-        pass
-    sys.exit(0)
-
-# test = self.tcontrol.current_round
-#         print(test)
+    # ******************************* MAIN ******************************

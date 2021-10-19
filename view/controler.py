@@ -1,5 +1,5 @@
-import tournament_controler
-import controler_player
+from tournament import tournament_controler
+from player import controler_player
 
 
 class Controler(object):

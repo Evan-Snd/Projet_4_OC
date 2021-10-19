@@ -53,7 +53,7 @@ class Round:
         self.__list_match.append(match)
 
     def has_match_result(self, ind_match):
-        match = self.get_match(ind_match-1)
+        match = self.get_match(ind_match - 1)
         if match[0][1] is not None:
             return True
         else:
