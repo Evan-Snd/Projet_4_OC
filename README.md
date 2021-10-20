@@ -14,7 +14,7 @@ for windows : ". nomEnv/Scripts/Activate" or ". nomEnv/Scripts/activate"
 pip install -requirements.txt
 
 # Generate Flake8 report (GitBash)
-In the folder Flake8 on your PC, open "setup.py" or "default.py" and add your env like "envProjet4"(example for this project), in the exclude section. Then write 'flake8 --format=html --htmldir=flake-report' 
+Write 'flake8 --format=html --htmldir=flake-report' 
 
 # Launch project
 "python main.py" (GitBash)
@@ -32,4 +32,3 @@ For the tournament :
 - View tournament list : Enter the first letter of the tournament, select the tournament with the index. Then you have 3 choice, view the player list, view round list and view the match list
 
 When you are making a tournament, you can type "pause" for change the rank of a player. For return to the tournament, go to the tournament management and type the fourth option "Reprendre le tournoi en cours"
-
